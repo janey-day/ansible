@@ -1,0 +1,24 @@
+--
+- hosts: bpv-fq-kkoap01, bpv-fq-kkoap02
+  remote_user: finadm
+  become_user: root
+  become_method: sudo
+
+  vars:
+    date: "{{ lookup('pipe', 'date +%y%m%d') }}"
+
+  tasks:
+  - name: "Copy Original conF File: /sw/tomcat/conf/context.xml"
+    shell: cp -arp /sw/tomcat/conf/context.xml /sw/tomcat/conf/xontext.xml.ori.{{ date }}
+    args:
+			chdir: /sw/tomcat/conf
+		ignore_errors: true
+
+	- name: "Change IP Conf File : /sw/tomcat/conf/context.xml"
+		replace:
+			path: "{{ item.path }}"
+			regexp: "{{ item.regexp }}"
+			replace: "{{ item.replace }}"
+		loop:
+			- { path: /sw/tomcat/conf/contexet.xml' , regexp: '10.27.104.28' , replace: '10.27.104.82}
+			- { path: /sw/tomcat/conf/contexet.xml' , regexp: '10.27.104.29' , replace: '10.27.104.83}
