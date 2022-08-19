@@ -1,4 +1,4 @@
---
+---
 - hosts: bpv-fq-kkoap01, bpv-fq-kkoap02
   remote_user: finadm
   become_user: root
