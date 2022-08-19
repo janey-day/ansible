@@ -1,0 +1,1 @@
+lastname: "{{ ansible_hostname.split('-')[-1][-7:] }}"
