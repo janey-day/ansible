@@ -1,0 +1,24 @@
+---
+- hosts: physical-db01
+  remote_user: finadm
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  
+  tasks:
+  - name: ssh-keygen
+    connection: local
+    command: "sshkeygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ''"
+    ignore_errors: yes
+    run_once: true
+    
+  - name: read id_rsa.pub
+    connection: local
+    command: "cat ~/.ssh/id_rsa.pub"
+    register: id_pub
+    run_once: true
+    
+  - name: remote lineinfile for authorized_keys
+    lineinfile:
+      dest: ~/.ssh/authorized_keys
+      line: "{{ id_pub.stdout }}"
